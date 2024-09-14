@@ -2,8 +2,9 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 import os
-from PyQt6.QtWidgets import QApplication, QMainWindow, QListWidget, QVBoxLayout, QWidget, QPushButton
-from Downloader import Data_Melovaz
+from PyQt6.QtGui import QIcon
+from PyQt6.QtWidgets import QApplication, QMainWindow, QListWidget, QLineEdit, QVBoxLayout, QWidget, QPushButton
+from Downloader import Data_Melovaz, CreateNewTable
 import sqlite3
 
 
@@ -19,16 +20,27 @@ class MelovazDownloader(QMainWindow):
         self.list_widget = QListWidget()
         self.download_button = QPushButton("Download Selected")
         self.download_button.clicked.connect(self.download_selected)
-
+        
+        self.search_input = QLineEdit()
+        self.search_button = QPushButton("Search")
+        self.search_button.clicked.connect(self.search_songs)
+        
+        self.setWindowIcon(QIcon('image/icon.png'))
+        self.setStyleSheet("QMainWindow {background-color: #1a1a1a;}")
+    
+        
+        
+        
         layout = QVBoxLayout()
+        
+        layout.addWidget(self.search_input)
+        layout.addWidget(self.search_button)   
         layout.addWidget(self.list_widget)
         layout.addWidget(self.download_button)
 
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
-        self.Data_Melovaz()
-        self.fetch_songs()
         self.download_all_button = QPushButton("Download All")
         self.download_all_button.clicked.connect(self.download_all)
         layout.addWidget(self.download_all_button)
@@ -36,8 +48,15 @@ class MelovazDownloader(QMainWindow):
         self.stop_download_button.clicked.connect(self.stop_download)
         layout.addWidget(self.stop_download_button)
 
-    def Data_Melovaz(self):
-        Data_Melovaz()
+    def search_songs(self):
+        search_text = self.search_input.text()
+        self.list_widget.clear()
+        CreateNewTable()
+        Data_Melovaz(search_text)
+        self.fetch_songs()
+        
+        
+
 
     def fetch_songs(self):
         conn = sqlite3.connect("melovaz/playlist.db")

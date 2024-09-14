@@ -3,23 +3,12 @@ from bs4 import BeautifulSoup
 import os
 import sqlite3
 
-url = "https://melovaz.ir/chill-bel-masry-playlist"
-
-response = requests.get(url)
-
-soup = BeautifulSoup(response.content, "html.parser")
-
-ul_tag = soup.find("ul", class_="audioplayer-audios")
-
-os.makedirs("melovaz", exist_ok=True)
-
-
-def Data_Melovaz():
-    # Connect to the SQLite database
+def CreateNewTable():
+    if os.path.exists("melovaz/playlist.db"):
+        os.remove("melovaz/playlist.db")
     conn = sqlite3.connect("melovaz/playlist.db")
     cursor = conn.cursor()
 
-    # Create the table if it doesn't exist
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS playlist (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -27,6 +16,26 @@ def Data_Melovaz():
             source TEXT NOT NULL
         )
     """)
+
+    conn.commit()
+    conn.close()
+
+
+def Data_Melovaz(search_text):
+    search_text1 = search_text
+    url = f"https://melovaz.ir/{search_text1}"
+
+    response = requests.get(url)
+
+    soup = BeautifulSoup(response.content, "html.parser")
+
+    ul_tag = soup.find("ul", class_="audioplayer-audios")
+
+    os.makedirs("melovaz", exist_ok=True)
+    # Connect to the SQLite database
+    conn = sqlite3.connect("melovaz/playlist.db")
+    cursor = conn.cursor()
+
 
     for li_tag in ul_tag.find_all("li"):
         data_src = li_tag.get("data-src")
