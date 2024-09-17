@@ -2,9 +2,10 @@ import sys
 import requests
 from bs4 import BeautifulSoup
 import os
-from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import QApplication, QMainWindow, QListWidget, QLineEdit, QVBoxLayout, QWidget, QPushButton
+from PyQt6.QtGui import QIcon, QPixmap
+from PyQt6.QtWidgets import QApplication, QHBoxLayout, QSizePolicy, QSpacerItem, QLabel, QMainWindow, QListWidget, QLineEdit, QVBoxLayout, QWidget, QPushButton
 from Downloader import Data_Melovaz, CreateNewTable
+from PyQt6.QtCore import Qt, QSize
 import sqlite3
 
 
@@ -20,33 +21,38 @@ class MelovazDownloader(QMainWindow):
         self.list_widget = QListWidget()
         self.download_button = QPushButton("Download Selected")
         self.download_button.clicked.connect(self.download_selected)
-        
+
         self.search_input = QLineEdit()
+        self.search_input.setPlaceholderText("Search for songs...")
+        self.search_input.setFixedSize(QSize(300, 30))
         self.search_button = QPushButton("Search")
         self.search_button.clicked.connect(self.search_songs)
-        
+
         self.setWindowIcon(QIcon('image/icon.png'))
         self.setStyleSheet("QMainWindow {background-color: #1a1a1a;}")
-    
-        
-        
-        
+
+        self.image_label = QLabel()
+        self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.image_label.setPixmap(QPixmap('image/icon_base.png'))
+
         layout = QVBoxLayout()
+        layout.addWidget(self.image_label)
         
-        layout.addWidget(self.search_input)
-        layout.addWidget(self.search_button)   
+        search_layout = QHBoxLayout()
+        search_layout.addWidget(self.search_input)
+        search_layout.addWidget(self.search_button)
+        layout.addLayout(search_layout)
+        
         layout.addWidget(self.list_widget)
-        layout.addWidget(self.download_button)
 
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
         self.download_all_button = QPushButton("Download All")
         self.download_all_button.clicked.connect(self.download_all)
+        
+        layout.addWidget(self.download_button)
         layout.addWidget(self.download_all_button)
-        self.stop_download_button = QPushButton("Stop Download")
-        self.stop_download_button.clicked.connect(self.stop_download)
-        layout.addWidget(self.stop_download_button)
 
     def search_songs(self):
         search_text = self.search_input.text()
@@ -54,9 +60,6 @@ class MelovazDownloader(QMainWindow):
         CreateNewTable()
         Data_Melovaz(search_text)
         self.fetch_songs()
-        
-        
-
 
     def fetch_songs(self):
         conn = sqlite3.connect("melovaz/playlist.db")
@@ -95,10 +98,6 @@ class MelovazDownloader(QMainWindow):
                 print(f"Downloaded: {data_title}")
 
         conn.close()
-
-    def stop_download(self):
-        # Implement your stop download logic here
-        print("Download stopped")
 
     def download_all(self):
         conn = sqlite3.connect("melovaz/playlist.db")

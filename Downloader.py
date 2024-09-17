@@ -20,7 +20,6 @@ def CreateNewTable():
     conn.commit()
     conn.close()
 
-
 def Data_Melovaz(search_text):
     search_text1 = search_text
     url = f"https://melovaz.ir/{search_text1}"
@@ -51,4 +50,6 @@ def Data_Melovaz(search_text):
 
     print("Data has been saved to the database.")
 
-
+# _____tester
+# search_text = "arabic-music"
+# Data_Melovaz(search_text)
