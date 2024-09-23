@@ -101,7 +101,8 @@ class MelovazDownloader(QMainWindow):
             self.download_song(data_title)
 
     def download_song(self, data_title):
-        conn = sqlite3.connect("playlist.db")
+        db_path = self.get_db_path()
+        conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
 
         cursor.execute(
