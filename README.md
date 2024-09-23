@@ -5,12 +5,13 @@ melovaz downloader is a user-friendly application for downloading songs from the
 
 ## Features ✨
 - **Download Songs**: Easily download your favorite tracks with just one click! 📥
+- (<a href="https://melovaz.ir" >melovaz.ir</a>)
 - **Simple UI**: An intuitive design for hassle-free use. 🎨
 - **Multiple Formats**: Supports downloading songs in various formats. 🎵
 
 ## Installation 🔧
 To install the program, follow these steps:
-1. [Insert download link here] 🔗
+1. <a href="https://github.com/pouriavelaei/Melovaz-downloader/releases/tag/1.0">Download Now! 🔗</a>
 2. Extract the files (if necessary). 📂
 3. Run the application. 🚀
 
