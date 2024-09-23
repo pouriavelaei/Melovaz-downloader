@@ -2,11 +2,22 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import sqlite3
+import platform
+
 
 def CreateNewTable():
-    if os.path.exists("playlist.db"):
-        os.remove("playlist.db")
-    conn = sqlite3.connect("playlist.db")
+    # Determine the user's document directory based on the operating system
+    if platform.system() == 'Windows':
+        document_dir = os.path.join(os.environ['USERPROFILE'], 'Documents')
+    else:
+        document_dir = os.path.join(os.environ['HOME'], 'Documents')
+
+    db_path = os.path.join(document_dir, 'playlist.db')
+
+    if os.path.exists(db_path):
+        os.remove(db_path)
+
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -20,6 +31,7 @@ def CreateNewTable():
     conn.commit()
     conn.close()
 
+
 def Data_Melovaz(search_text):
     search_text1 = search_text
     url = f"https://melovaz.ir/{search_text1}"
@@ -32,9 +44,15 @@ def Data_Melovaz(search_text):
 
     os.makedirs("melovaz", exist_ok=True)
     # Connect to the SQLite database
-    conn = sqlite3.connect("playlist.db")
-    cursor = conn.cursor()
+    if platform.system() == 'Windows':
+        document_dir = os.path.join(os.environ['USERPROFILE'], 'Documents')
+    else:
+        document_dir = os.path.join(os.environ['HOME'], 'Documents')
 
+    db_path = os.path.join(document_dir, 'playlist.db')
+    
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
 
     for li_tag in ul_tag.find_all("li"):
         data_src = li_tag.get("data-src")

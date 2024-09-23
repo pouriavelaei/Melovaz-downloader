@@ -55,6 +55,25 @@ class MelovazDownloader(QMainWindow):
         layout.addWidget(self.download_button)
         layout.addWidget(self.download_all_button)
 
+    def get_db_path(self):
+        if platform.system() == "Windows":
+            user_home = os.path.expanduser("~")
+            db_path = os.path.join(user_home, "Documents", "playlist.db")
+        else:
+            user_home = os.path.expanduser("~")
+            db_path = os.path.join(user_home, "Documents", "playlist.db")
+        return db_path
+
+    def get_download_path(self, file_name):
+        if platform.system() == "Windows":
+            user_home = os.path.expanduser("~")
+            download_path = os.path.join(user_home, "Music", file_name)
+        else:
+            user_home = os.path.expanduser("~")
+            download_path = os.path.join(user_home, "Music", file_name)
+        return download_path
+
+    
     def search_songs(self):
         search_text = self.search_input.text()
         self.list_widget.clear()
@@ -63,7 +82,8 @@ class MelovazDownloader(QMainWindow):
         self.fetch_songs()
 
     def fetch_songs(self):
-        conn = sqlite3.connect("playlist.db")
+        db_path = self.get_db_path()
+        conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
         cursor.execute("SELECT title FROM playlist")
         rows = cursor.fetchall()
@@ -107,7 +127,8 @@ class MelovazDownloader(QMainWindow):
         conn.close()
 
     def download_all(self):
-        conn = sqlite3.connect("playlist.db")
+        db_path = self.get_db_path()
+        conn = sqlite3.connect(db_path)
         cursor = conn.cursor()
 
         cursor.execute("SELECT title, source FROM playlist")
