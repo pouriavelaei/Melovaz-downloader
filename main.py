@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import QApplication, QHBoxLayout, QSizePolicy, QSpacerItem,
 from Downloader import Data_Melovaz, CreateNewTable
 from PyQt6.QtCore import Qt, QSize
 import sqlite3
+import platform
 
 
 class MelovazDownloader(QMainWindow):
@@ -28,12 +29,12 @@ class MelovazDownloader(QMainWindow):
         self.search_button = QPushButton("Search")
         self.search_button.clicked.connect(self.search_songs)
 
-        self.setWindowIcon(QIcon('image/icon.png'))
+        self.setWindowIcon(QIcon('icon.png'))
         self.setStyleSheet("QMainWindow {background-color: #1a1a1a;}")
 
         self.image_label = QLabel()
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.image_label.setPixmap(QPixmap('image/icon_base.png'))
+        self.image_label.setPixmap(QPixmap('icon_base.png'))
 
         layout = QVBoxLayout()
         layout.addWidget(self.image_label)
@@ -62,7 +63,7 @@ class MelovazDownloader(QMainWindow):
         self.fetch_songs()
 
     def fetch_songs(self):
-        conn = sqlite3.connect("melovaz/playlist.db")
+        conn = sqlite3.connect("playlist.db")
         cursor = conn.cursor()
         cursor.execute("SELECT title FROM playlist")
         rows = cursor.fetchall()
@@ -80,7 +81,7 @@ class MelovazDownloader(QMainWindow):
             self.download_song(data_title)
 
     def download_song(self, data_title):
-        conn = sqlite3.connect("melovaz/playlist.db")
+        conn = sqlite3.connect("playlist.db")
         cursor = conn.cursor()
 
         cursor.execute(
@@ -90,9 +91,15 @@ class MelovazDownloader(QMainWindow):
         if row:
             data_src = row[0]
             file_name = os.path.basename(data_src)
-            file_path = os.path.join("melovaz", file_name)
+            # Determine the user's home directory and create the download path
+            if platform.system() == "Windows":
+                user_home = os.path.expanduser("~")
+                download_path = os.path.join(user_home, "Music", file_name)
+            else:
+                user_home = os.path.expanduser("~")
+                download_path = os.path.join(user_home, "Music", file_name)
 
-            with open(file_path, "wb") as file:
+            with open(download_path, "wb") as file:
                 response = requests.get(data_src)
                 file.write(response.content)
                 print(f"Downloaded: {data_title}")
@@ -100,7 +107,7 @@ class MelovazDownloader(QMainWindow):
         conn.close()
 
     def download_all(self):
-        conn = sqlite3.connect("melovaz/playlist.db")
+        conn = sqlite3.connect("playlist.db")
         cursor = conn.cursor()
 
         cursor.execute("SELECT title, source FROM playlist")
@@ -110,9 +117,15 @@ class MelovazDownloader(QMainWindow):
             data_title = row[0]
             data_src = row[1]
             file_name = os.path.basename(data_src)
-            file_path = os.path.join("melovaz", file_name)
+            # Determine the user's home directory and create the download path
+            if platform.system() == "Windows":
+                user_home = os.path.expanduser("~")
+                download_path = os.path.join(user_home, "Music", file_name)
+            else:
+                user_home = os.path.expanduser("~")
+                download_path = os.path.join(user_home, "Music", file_name)
 
-            with open(file_path, "wb") as file:
+            with open(download_path, "wb") as file:
                 response = requests.get(data_src)
                 file.write(response.content)
                 print(f"Downloaded: {data_title}")

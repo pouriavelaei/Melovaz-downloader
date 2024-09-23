@@ -4,9 +4,9 @@ import os
 import sqlite3
 
 def CreateNewTable():
-    if os.path.exists("melovaz/playlist.db"):
-        os.remove("melovaz/playlist.db")
-    conn = sqlite3.connect("melovaz/playlist.db")
+    if os.path.exists("playlist.db"):
+        os.remove("playlist.db")
+    conn = sqlite3.connect("playlist.db")
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -32,7 +32,7 @@ def Data_Melovaz(search_text):
 
     os.makedirs("melovaz", exist_ok=True)
     # Connect to the SQLite database
-    conn = sqlite3.connect("melovaz/playlist.db")
+    conn = sqlite3.connect("playlist.db")
     cursor = conn.cursor()
 
 
