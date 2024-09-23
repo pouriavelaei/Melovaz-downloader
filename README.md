@@ -16,6 +16,7 @@ To install the program, follow these steps:
 
 ## Usage 🛠️
 Once the program is running:
+![App Screenshot](https://github.com/pouriavelaei/Melovaz-downloader/raw/main/melovaz/Untitled.png)
 1. Enter the link of the desired song. 🔍
 2. Click the "Download" button. ⬇️
 3. The song will be downloaded to your specified location. 📁
