@@ -13,12 +13,14 @@ import platform
 class MelovazDownloader(QMainWindow):
     def __init__(self):
         super().__init__()
+        
         self.setWindowTitle("Melovaz Downloader")
         self.setGeometry(100, 100, 600, 400)
 
         self.initUI()
 
     def initUI(self):
+        # Create widgets for searching, displaying, and downloading songs
         self.list_widget = QListWidget()
         self.download_button = QPushButton("Download Selected")
         self.download_button.clicked.connect(self.download_selected)
@@ -28,14 +30,17 @@ class MelovazDownloader(QMainWindow):
         self.search_input.setFixedSize(QSize(300, 30))
         self.search_button = QPushButton("Search")
         self.search_button.clicked.connect(self.search_songs)
-
+        
+        # Set the window icon and style
         self.setWindowIcon(QIcon('icon.png'))
         self.setStyleSheet("QMainWindow {background-color: #1a1a1a;}")
 
+        # Add an image label to display the application logo
         self.image_label = QLabel()
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.image_label.setPixmap(QPixmap('icon_base.png'))
 
+        # Create a layout for the widgets and set it to the main window
         layout = QVBoxLayout()
         layout.addWidget(self.image_label)
         
@@ -49,12 +54,15 @@ class MelovazDownloader(QMainWindow):
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
+        
+        # Add buttons for downloading selected and all songs
         self.download_all_button = QPushButton("Download All")
         self.download_all_button.clicked.connect(self.download_all)
         
         layout.addWidget(self.download_button)
         layout.addWidget(self.download_all_button)
 
+    # Method to get the path of the database file
     def get_db_path(self):
         if platform.system() == "Windows":
             user_home = os.path.expanduser("~")
@@ -64,6 +72,7 @@ class MelovazDownloader(QMainWindow):
             db_path = os.path.join(user_home, "Documents", "playlist.db")
         return db_path
 
+    # Method to get the download path for a given file name
     def get_download_path(self, file_name):
         if platform.system() == "Windows":
             user_home = os.path.expanduser("~")
@@ -73,7 +82,7 @@ class MelovazDownloader(QMainWindow):
             download_path = os.path.join(user_home, "Music", file_name)
         return download_path
 
-    
+    # Method to search for songs and display them in the list widget
     def search_songs(self):
         search_text = self.search_input.text()
         self.list_widget.clear()
@@ -81,6 +90,7 @@ class MelovazDownloader(QMainWindow):
         Data_Melovaz(search_text)
         self.fetch_songs()
 
+    # Method to fetch the songs from the database and display them in the list widget
     def fetch_songs(self):
         db_path = self.get_db_path()
         conn = sqlite3.connect(db_path)
@@ -94,12 +104,14 @@ class MelovazDownloader(QMainWindow):
 
         conn.close()
 
+    # Method to download the selected songs
     def download_selected(self):
         selected_items = self.list_widget.selectedItems()
         for item in selected_items:
             data_title = item.text()
             self.download_song(data_title)
 
+    # Method to download a single song
     def download_song(self, data_title):
         db_path = self.get_db_path()
         conn = sqlite3.connect(db_path)
@@ -127,6 +139,7 @@ class MelovazDownloader(QMainWindow):
 
         conn.close()
 
+    # Method to download all songs
     def download_all(self):
         db_path = self.get_db_path()
         conn = sqlite3.connect(db_path)
@@ -154,7 +167,7 @@ class MelovazDownloader(QMainWindow):
 
         conn.close()
 
-
+# Run the application
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     downloader = MelovazDownloader()
