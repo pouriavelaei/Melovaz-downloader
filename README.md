@@ -11,7 +11,7 @@ melovaz downloader is a user-friendly application for downloading songs from the
 
 ## Installation 🔧
 To install the program, follow these steps:
-1. [Insert download link here] 🔗
+1. <a href="https://github.com/pouriavelaei/Melovaz-downloader/releases/tag/1.0">Download Now</a> 🔗
 2. Extract the files (if necessary). 📂
 3. Run the application. 🚀
 
