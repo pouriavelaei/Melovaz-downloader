@@ -4,12 +4,25 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = "*"
+altgraph = "==0.17.4"
+beautifulsoup4 = "==4.12.3"
+certifi = "==2024.8.30"
+charset-normalizer = "==3.3.2"
+idna = "==3.10"
+packaging = "==24.1"
+pefile = "==2024.8.26"
+pyinstaller = "==6.10.0"
+pyinstaller-hooks-contrib = "==2024.8"
+pyqt6 = "==6.7.1"
+pyqt6-qt6 = "==6.7.2"
+pyqt6-sip = "==13.8.0"
+pywin32-ctypes = "==0.2.3"
+requests = "==2.32.3"
+soupsieve = "==2.6"
+urllib3 = "==2.2.3"
 bs4 = "*"
-pyqt6 = "*"
-pyside6 = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.12"
+python_version = "3.13"
