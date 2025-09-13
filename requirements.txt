@@ -13,6 +13,6 @@ PyQt6-Qt6==6.7.2
 PyQt6_sip==13.8.0
 pywin32-ctypes==0.2.3
 requests==2.32.3
-setuptools==75.1.0
+setuptools==78.1.1
 soupsieve==2.6
 urllib3==2.2.3
